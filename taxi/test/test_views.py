@@ -6,6 +6,7 @@ from taxi.models import Manufacturer
 
 MANUFACTURER_URL = reverse("taxi:manufacturer-list")
 
+
 class PublicManufacturerTest(TestCase):
     def test_login_required(self):
         res = self.client.get(MANUFACTURER_URL)
@@ -26,10 +27,12 @@ class PrivateManufacturerDeleteTest(TestCase):
         delete_url = reverse(
             "taxi:manufacturer-delete", args=[manufacturer.id]
         )
-        res = self.client.post(delete_url)
+        response = self.client.post(delete_url)
         self.assertFalse(
             Manufacturer.objects.filter(id=manufacturer.id).exists()
         )
+        success_url = reverse("taxi:manufacturer-list")
+        self.assertRedirects(response, success_url)
 
 
 CAR_LIST_URL = reverse("taxi:car-list")
