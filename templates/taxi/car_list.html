@@ -9,10 +9,7 @@
     </a>
   </h1>
   
-  <form method="get" action="" class="form-inline">
-  {{ search_form|crispy }}
-  <input class="btn btn-secondary" type="submit" value="🔎">
-  </form>
+  {% include "taxi/search_form.html" %}
   
   {% if car_list %}
     <ul>

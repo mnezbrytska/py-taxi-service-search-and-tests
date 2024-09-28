@@ -31,8 +31,16 @@ class CarSearchFormTest(TestCase):
             name="test_manufacturer",
             country="test_country"
         )
-        self.car = Car.objects.create(
-            model="test_model",
+        self.car_1 = Car.objects.create(
+            model="test_model_1",
+            manufacturer=self.manufacturer
+        )
+        self.car_2 = Car.objects.create(
+            model="test_model_2",
+            manufacturer=self.manufacturer
+        )
+        self.non_matching_car = Car.objects.create(
+            model="random_model",
             manufacturer=self.manufacturer
         )
 
@@ -43,7 +51,10 @@ class CarSearchFormTest(TestCase):
         cars = Car.objects.filter(
             model__icontains=form_data["model"]
         )
-        self.assertEqual(list(cars), [self.car])
+        self.assertIn(self.car_1, cars)
+        self.assertIn(self.car_2, cars)
+        self.assertNotIn(self.non_matching_car, cars)
+        self.assertEqual(list(cars), [self.car_1, self.car_2])
 
 
 class ManufacturerSearchFormTest(TestCase):
