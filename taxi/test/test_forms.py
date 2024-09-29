@@ -14,6 +14,13 @@ class DriverSearchFormTest(TestCase):
             last_name="Test",
             license_number="ABC12345"
         )
+        self.non_matching_driver = get_user_model().objects.create_user(
+            username="random_driver",
+            password="randompassword",
+            first_name="Random",
+            last_name="Random",
+            license_number="XYZ67890"
+        )
 
     def test_driver_search_form_valid_data(self) -> None:
         form_data = {"username": "test"}
@@ -22,7 +29,10 @@ class DriverSearchFormTest(TestCase):
         drivers = get_user_model().objects.filter(
             username__icontains=form_data["username"]
         )
+        self.assertIn(self.driver, drivers)
+        self.assertNotIn(self.non_matching_driver, drivers)
         self.assertEqual(list(drivers), [self.driver])
+
 
 
 class CarSearchFormTest(TestCase):
@@ -63,6 +73,10 @@ class ManufacturerSearchFormTest(TestCase):
             name="test_manufacturer",
             country="test_country"
         )
+        self.non_matching_manufacturer = Manufacturer.objects.create(
+            name="random_manufacturer",
+            country="test_country"
+        )
 
     def test_manufacturer_search_form_valid_data(self) -> None:
         form_data = {"name": "test_manufacturer"}
@@ -71,4 +85,6 @@ class ManufacturerSearchFormTest(TestCase):
         manufacturers = Manufacturer.objects.filter(
             name__icontains=form_data["name"]
         )
+        self.assertIn(self.manufacturer, manufacturers)
+        self.assertNotIn(self.non_matching_manufacturer, manufacturers)
         self.assertEqual(list(manufacturers), [self.manufacturer])
