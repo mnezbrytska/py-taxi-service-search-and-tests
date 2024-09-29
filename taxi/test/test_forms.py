@@ -34,7 +34,6 @@ class DriverSearchFormTest(TestCase):
         self.assertEqual(list(drivers), [self.driver])
 
 
-
 class CarSearchFormTest(TestCase):
     def setUp(self) -> None:
         self.manufacturer = Manufacturer.objects.create(
